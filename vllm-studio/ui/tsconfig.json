@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "tsBuildInfoFile": "./node_modules/.cache/tsbuildinfo.app"
+  },
+  "include": ["src", "vite.config.ts", "tailwind.config.ts"],
+  "exclude": ["node_modules", "dist"]
+}

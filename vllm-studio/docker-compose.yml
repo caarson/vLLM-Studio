@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  manager:
+    build:
+      context: ./manager
+    image: vllm-studio-manager:latest
+    container_name: vllm-studio-manager
+    restart: unless-stopped
+    environment:
+      - MANAGER_TOKEN=${MANAGER_TOKEN:-changeme}
+      - HUGGINGFACE_HUB_TOKEN
+      - CACHE_DIR=/hf-cache
+    volumes:
+      - hf-cache:/hf-cache
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "4000:4000"
+    depends_on:
+      - ui
+
+  ui:
+    build:
+      context: ./ui
+    image: vllm-studio-ui:latest
+    container_name: vllm-studio-ui
+    restart: unless-stopped
+    environment:
+      - VITE_API_BASE=http://localhost:4000
+    ports:
+      - "5173:5173"
+    volumes:
+      - hf-cache:/hf-cache
+
+volumes:
+  hf-cache:
+    name: vllm-studio-hf-cache
